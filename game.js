@@ -6,6 +6,9 @@ const btnRight = document.querySelector('#right')
 const btnDown = document.querySelector('#down')
 const spanLives = document.querySelector('#lives')
 const spanTime = document.querySelector('#time')
+const spanRecord = document.querySelector('#record')
+const pResult = document.querySelector('#result')
+
 
 let canvasSize;
 let elementsSize;
@@ -38,13 +41,14 @@ function startGame (){
     game.font = elementsSize + 'px Verdana'
     game.textAlign = 'center';
     if (!maps[level]) {
-        gameWin();
+        setRecordByWin();
         return;
     }
 
     if (!timeStart) {
         timeStart = Date.now();
         timerInterval = setInterval(showTime,100);
+        showRecord();
     }
 
 
@@ -153,9 +157,29 @@ function showTime () {
     spanTime.innerHTML = Date.now() - timeStart;
 }
 
-function gameWin() {
+function showRecord() {
+    spanRecord.innerHTML = localStorage.getItem('record_time')
+}
+
+function setRecordByWin() {
+    
+    
+    const recordTime = localStorage.getItem('record_time')
+    const playerTime = Date.now() - timeStart;
     console.log('Has ganado');
     clearInterval(timerInterval);
+
+    if (recordTime){
+        if (recordTime > playerTime){
+            localStorage.setItem('record_time', playerTime);
+            pResult.innerHTML = 'Has superado el record, sigue intentando tu mejor marca';
+        } else {
+            pResult.innerHTML = 'Casi logras superar el record, vuelve a intentarlo';
+        }
+    } else {
+        localStorage.setItem('record_time', playerTime);
+        pResult.innerHTML = 'Es tu primer juego, sigue intentando tu mejor marca';
+    }
 }
 
 function setCanvasSize () {
