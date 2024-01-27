@@ -7,6 +7,8 @@ const btnDown = document.querySelector('#down')
 
 let canvasSize;
 let elementsSize;
+let level = 0;
+let lives = 3;
 
 const playerPosition = {
     x: undefined,
@@ -20,6 +22,7 @@ const giftPosition = {
 
 let enemiesPosition = [];
 
+
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
@@ -27,8 +30,11 @@ function startGame (){
 
     game.font = elementsSize + 'px Verdana'
     game.textAlign = 'center';
-
-    const map = maps[0];
+    if (!maps[level]) {
+        gameWin();
+        return;
+    }
+    const map = maps[level];
     const mapRows = map.trim().split('\n');
     const mapMatrix = mapRows.map(row => row.trim().split(''))
     console.log({map,mapRows,mapMatrix});
@@ -74,8 +80,10 @@ function movePlayer (){
     const giftCollisionX = playerPosition.x.toFixed(1) == giftPosition.x.toFixed(1);
     const giftCollisionY = playerPosition.y.toFixed(1) == giftPosition.y.toFixed(1);
     const giftCollision = giftCollisionX && giftCollisionY;
+
     if(giftCollision){
         console.log('Subiste de Nivel');
+        levelWin();
     }
     
     const enemiesCollision = enemiesPosition.find(enemy => {
@@ -87,11 +95,36 @@ function movePlayer (){
 
     if(enemiesCollision){
         console.log('Perdiste :c');
+        levelFail();
+        
     }
 
 
     game.fillText(emojis['PLAYER'], playerPosition.x , playerPosition.y)
 
+}
+
+function levelWin (){
+    level++;
+    startGame();
+}
+
+function levelFail(){
+    lives --;
+    if (lives <= 0){
+        level = 0;
+        lives = 3
+    }
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
+    startGame();
+    
+    
+
+}
+
+function gameWin() {
+    console.log('Has ganado');
 }
 
 function setCanvasSize () {
@@ -127,7 +160,7 @@ function moveByKeys(event){
 
 function moveUp() {
     console.log('Movimiento hacia arriba');
-    if ((playerPosition.y - elementsSize) < elementsSize){
+    if ((playerPosition.y - elementsSize) < 1){
         console.log('Out');
     } else {
         playerPosition.y -= elementsSize;
@@ -137,7 +170,7 @@ function moveUp() {
 
 function moveLeft() {
     console.log('Movimiento hacia la izquierda');
-    if ((playerPosition.x - elementsSize) < elementsSize){
+    if ((playerPosition.x - elementsSize) < 1){
         console.log('Out');
     } else {
         playerPosition.x -= elementsSize;
