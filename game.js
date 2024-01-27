@@ -4,9 +4,12 @@ const btnUp = document.querySelector('#up')
 const btnLeft = document.querySelector('#left')
 const btnRight = document.querySelector('#right')
 const btnDown = document.querySelector('#down')
+const spanLives = document.querySelector('#lives')
+const spanTime = document.querySelector('#time')
 
 let canvasSize;
 let elementsSize;
+let timeStart;
 let level = 0;
 let lives = 3;
 
@@ -34,10 +37,16 @@ function startGame (){
         gameWin();
         return;
     }
+
+
+    
+
     const map = maps[level];
     const mapRows = map.trim().split('\n');
     const mapMatrix = mapRows.map(row => row.trim().split(''))
     console.log({map,mapRows,mapMatrix});
+
+    showLives();
 
     enemiesPosition = [];
     game.clearRect(0,0,canvasSize,canvasSize)
@@ -111,6 +120,7 @@ function levelWin (){
 
 function levelFail(){
     lives --;
+
     if (lives <= 0){
         level = 0;
         lives = 3
@@ -120,6 +130,18 @@ function levelFail(){
     startGame();
     
     
+
+}
+
+function showLives() {
+    const heartArrays = Array(lives).fill(emojis['HEART']) 
+    console.log({heartArrays});
+    spanLives.innerHTML = "";
+    heartArrays.forEach(heart => spanLives.innerHTML += heart);
+    // heartArrays.forEach(heart => spanLives.append(heart));
+}
+
+function showTime () {
 
 }
 
