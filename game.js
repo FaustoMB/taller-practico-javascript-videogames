@@ -9,9 +9,13 @@ const spanTime = document.querySelector('#time')
 
 let canvasSize;
 let elementsSize;
-let timeStart;
+
 let level = 0;
 let lives = 3;
+
+let timeStart;
+let timePlayer;
+let timerInterval;
 
 const playerPosition = {
     x: undefined,
@@ -38,8 +42,11 @@ function startGame (){
         return;
     }
 
+    if (!timeStart) {
+        timeStart = Date.now();
+        timerInterval = setInterval(showTime,100);
+    }
 
-    
 
     const map = maps[level];
     const mapRows = map.trim().split('\n');
@@ -124,6 +131,7 @@ function levelFail(){
     if (lives <= 0){
         level = 0;
         lives = 3
+        timeStart = undefined;
     }
     playerPosition.x = undefined;
     playerPosition.y = undefined;
@@ -142,11 +150,12 @@ function showLives() {
 }
 
 function showTime () {
-
+    spanTime.innerHTML = Date.now() - timeStart;
 }
 
 function gameWin() {
     console.log('Has ganado');
+    clearInterval(timerInterval);
 }
 
 function setCanvasSize () {
