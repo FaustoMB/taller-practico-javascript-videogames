@@ -37,7 +37,7 @@ window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
 function startGame (){
-
+    console.log({canvasSize});
     game.font = elementsSize + 'px Verdana'
     game.textAlign = 'center';
     if (!maps[level]) {
@@ -55,7 +55,7 @@ function startGame (){
     const map = maps[level];
     const mapRows = map.trim().split('\n');
     const mapMatrix = mapRows.map(row => row.trim().split(''))
-    console.log({map,mapRows,mapMatrix});
+    
 
     showLives();
 
@@ -194,6 +194,9 @@ function setCanvasSize () {
     canvas.setAttribute('height', canvasSize)
 
     elementsSize = canvasSize / 11;
+    
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
 
     startGame();
 }
